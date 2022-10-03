@@ -1,0 +1,11 @@
+controller\ProductoC.class
+model\Producto.class
+dao\ProductoImpl.class
+dao\EmpleadoImpl.class
+model\Empleado.class
+controller\EmpleadoC.class
+dao\Conexion.class
+dao\ICRUD.class
+controller\ClienteC.class
+model\Cliente.class
+dao\ClienteImpl.class
