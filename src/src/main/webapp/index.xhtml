@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <h:head>
+        <title>Mantenimiento de Productos</title>
+        <f:event listener="#{ProductoC.listar()}" type="preRenderView"/>
+
+    </h:head>
+    <center>
+        <p:growl showDetail="true" id="messages">
+            <p:autoUpdate/>
+        </p:growl>
+    </center>
+
+    <h:body>
+
+        <h:form> 
+            <div class="card">
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="Producto" outcome="index" icon="pi pi-fw pi-home">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="Cliente" outcome="Cliente" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+                </p:tabMenu>
+            </div>
+        </h:form>
+        <center>
+            <h:form>
+                <h1 style="color:black; font-weight:bold; font-size:40px">REGISTRO DE PRODUCTOS</h1>              
+            </h:form>
+        </center>
+        <center>
+            <h:form id="frmRegPro">
+                <p:panelGrid columns="2">
+
+                    <p:outputLabel value ="Nombre" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText  placeholder="Nombre del producto" value="#{ProductoC.producto.NOMPRO}">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                        <f:validator validatorId="productoV"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="Precio" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText  placeholder="00.00" value="#{ProductoC.producto.PREPRO}" maxlength="5">
+                        <p:keyFilter regEx="/[0-9]/"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="Descripcion" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText placeholder="descripcion del producto" value="#{ProductoC.producto.DESPRO}">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="STOCK" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:spinner id="STOPRO" value="#{ProductoC.producto.STOPRO}" required="true" requiredMessage="Ingrese el STOCK"
+                               style="width: 180px;" max="10" min="1">
+                    </p:spinner>
+                    
+                    <p:commandButton  action ="#{ProductoC.registrar()}" value="Registrar" update=":tablaProducto"/>
+                </p:panelGrid>
+            </h:form>
+        </center>
+        <!--            Fin del Formulario Producto-->
+        <p:spacer height="0"/>
+
+
+        <!--            listado de Producto     -->
+        <center>
+            <h:form id="tablaProducto"> 
+
+                <p:dataTable id="tablaPro" var="lista" value="#{ProductoC.lstProducto}" selection="#{ProductoC.producto}" rowKey="#{lista.IDPRO}" rows="10" 
+                             paginator="true" selectionMode="single"  resizableColumns="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records" rowsPerPageTemplate="5,10,15"  style="width: 80%; border-style: none;">
+
+                    <f:facet name="header">
+                        <div style="float:left">
+                                <h:form>
+                                    <p:outputLabel value="FILTRO POR: " style="color:black; font-weight:bold"/>
+                                    <center>
+                                        <p:selectOneMenu value="#{ProductoC.tipo}" style="width:100px">
+                                            <f:selectItem itemLabel="Activos" itemValue="1"/> 
+                                            <f:selectItem itemLabel="Inactivos" itemValue="2"/>
+                                            <f:selectItem itemLabel="Todos" itemValue="3"/>
+                                            <p:ajax listener="#{ProductoC.listar()}" update=":tablaProducto:tablaPro"/>
+                                        </p:selectOneMenu>
+                                    </center>
+                                </h:form>
+                            </div>
+
+                    </f:facet>     
+                    
+                    <f:facet name= "header"><center style="color: black; font-weight:bold; font-size: 30px">
+                            LISTA DE PRODUCTOS</center></f:facet>
+
+                    <p:column headerText="Id" filterBy="#{lista.IDPRO}" style="width: 10px;">
+                        <h:outputText value="#{lista.IDPRO}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre" filterBy="#{lista.NOMPRO}" style="width: 50px;">
+                        <h:outputText value="#{lista.NOMPRO}" />
+                    </p:column>
+
+                    <p:column headerText="Precio" filterBy="#{lista.PREPRO}" style="width: 15px;">
+                        <h:outputText value="#{lista.PREPRO}" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion" filterBy="#{lista.DESPRO }" style="width: 150px;">
+                        <h:outputText value="#{lista.DESPRO}" />
+                    </p:column>
+                    <p:column headerText="STOCK" style="width:30px;">
+                        <h:outputText value="#{lista.STOPRO}" />
+                    </p:column>
+                </p:dataTable>
+                
+                <p:contextMenu for="tablaPro" >
+                    <p:menuitem value="Modificar" icon="pi pi-pencil" oncomplete="PF('wdlgDatos').show()" update=":frmModificar2"/>
+                    <p:menuitem value="Eliminar" icon="pi pi-trash" actionListener="#{ProductoC.eliminar()}" update="tablaPro">
+                        <p:confirm header="Confirmación" message="¿Deseas eliminar?"/>
+                    </p:menuitem>
+                    <p:menuitem value="Restaurar" icon="pi pi-plus" actionListener="#{ProductoC.restaurar()}" update="tablaPro">
+                        <p:confirm header="Confirmación" message="¿Deseas restaurar?"/>
+                    </p:menuitem>
+                </p:contextMenu>
+            </h:form>
+        </center>
+
+        <p:dialog header="Datos del Producto" widgetVar="wdlgDatos" id="dlgDatos">
+            <h:form id="frmModificar2">
+                <p:panelGrid columns="2">
+                   <p:outputLabel value ="Nombre" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText  placeholder="Nombre del producto" value="#{ProductoC.producto.NOMPRO}">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="Precio" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText  placeholder="00.00" value="#{ProductoC.producto.PREPRO}" maxlength="5">
+                        <p:keyFilter regEx="/[0-9]/"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="Descripcion" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText placeholder="descripcion del producto" value="#{ProductoC.producto.DESPRO}">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                    </p:inputText>
+
+                    <p:outputLabel value ="STOCK" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:spinner id="STOPRO" value="#{ProductoC.producto.STOPRO}" required="true" requiredMessage="Ingrese el STOCK"
+                               style="width: 180px;" max="10" min="1">
+                    </p:spinner>
+                    
+
+
+                    <p:commandButton  id="btnModificar"  value="Modificar" actionListener="#{ProductoC.modificar()}"
+                                      update="tablaProducto:tablaPro" 
+                                      oncomplete="if(!args.validationFailed)PF('wdlgDatos').hide();">
+                        <p:confirm header="Confirmación" message="¿Deseas Modificar?" icon="ui-icon-alert"/>
+                    </p:commandButton>  
+                    <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('wdlgDatos').hide();" />
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </p:confirmDialog>
+
+                </p:panelGrid>
+            </h:form>
+        </p:dialog> 
+    </h:body>
+    <h:outputScript library="js" name="..//resources/js/spanishLocales.js"/>
+</html>
