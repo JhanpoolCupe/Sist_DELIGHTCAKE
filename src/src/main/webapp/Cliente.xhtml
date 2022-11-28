@@ -20,7 +20,7 @@ and open the template in the editor.-->
         <f:event listener="#{ClienteC.listar()}" type="preRenderView"/>
     </h:head>
 
-    <h:body>
+    <h:body id="Body">
         <h:form> 
             <div class="card">
                 <p:tabMenu activeIndex="#{param.i}">
@@ -43,7 +43,7 @@ and open the template in the editor.-->
             </h:form>  
         </center>
         <center>
-            <h:form id="frmRegPro">
+            <h:form id="frmRegPro" prependId="false">
                 <p:panelGrid columns="3" styleClass="ui-noborder">
 
                     <p:outputLabel value ="NOMBRES" style="color:black; font-weight:bold; font-size:16px"/>
@@ -55,28 +55,36 @@ and open the template in the editor.-->
                     </p:inputText>
                     <p:message id="msgNOMCLI" for="NOMCLI"/>  
 
-                    <p:outputLabel value ="APELLIDOS" style="color:black; font-weight:bold; font-size:16px"/>
-                    <p:inputText id="APECLI" value="#{ClienteC.cliente.APECLI}"
-                                 required="true" requiredMessage="Ingrese los APELLIDOS">
+                    <p:outputLabel value ="APELLIDO PATERNO" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText id="APEPATCLI" value="#{ClienteC.cliente.APEPATCLI}"
+                                 required="true" requiredMessage="Ingrese los APELLIDO PATERNO">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
-                        <p:ajax update="msgAPECLI" event="keyup"  delay="800"/>
-                        <p:tooltip for="APECLI" value="Ingrese el NOMBRE" trackMouse="focus"/>
+                        <p:ajax update="msgAPEPATCLI" event="keyup"  delay="800"/>
+                        <p:tooltip for="APEPATCLI" value="Ingrese el Apellido Paterno" trackMouse="focus"/>
                     </p:inputText>
-                    <p:message id="msgAPECLI" for="APECLI"/>  
+                    <p:message id="msgAPEPATCLI" for="APEPATCLI"/>  
+
+                    <p:outputLabel value ="APELLIDOS MATERNO" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText id="APEMATCLI" value="#{ClienteC.cliente.APEMATCLI}"
+                                 required="true" requiredMessage="Ingrese los APELLIDO MATERNO">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                        <p:ajax update="msgAPEMATCLI" event="keyup"  delay="800"/>
+                        <p:tooltip for="APEMATCLI" value="Ingrese el Apellido Materno" trackMouse="focus"/>
+                    </p:inputText>
+                    <p:message id="msgAPEMATCLI" for="APEMATCLI"/>  
 
                     <p:outputLabel value ="DNI" style="color:black; font-weight:bold; font-size:16px"/>
-                    <p:inputText id="DNICLI" value="#{ClienteC.cliente.DNICLI}" maxlength="8"
+                    <p:inputText id="DNICLI" value="#{ClienteC.cliente.DNICLI}" onkeyup="validarDNIcliente()" maxlength="8"
                                  required="true" requiredMessage="Ingrese el DNI">
                         <p:keyFilter regEx="/[0-9]/"/>
                         <f:validator validatorId="dniV"/>
                         <p:ajax update="msgDNICLI" event="keyup"  delay="800"/>
-                        <p:tooltip for="DNICLI" value="Ingrese el NOMBRE" trackMouse="focus"/>
+                        <p:tooltip for="DNICLI" value="Ingrese el DNI" trackMouse="focus"/>
                     </p:inputText>
                     <p:message id="msgDNICLI" for="DNICLI"/>  
 
-
                     <p:outputLabel value ="TELEFONO" style="color:black; font-weight:bold; font-size:16px"/>
-                    <p:inputText id="TELCLI" value="#{ClienteC.cliente.TELCLI}" maxlength="9"
+                    <p:inputText id="TELCLI" value="#{ClienteC.cliente.TELCLI}" onkeyup="validarCelularCliente()" maxlength="9"
                                  required="true" requiredMessage="Ingrese el TELEFONO">
                         <p:keyFilter regEx="/[0-9]/"/>
                         <f:validator validatorId="celularV"/>
@@ -90,7 +98,7 @@ and open the template in the editor.-->
                                   required="true" requiredMessage="Ingrese los EMAIL">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_@_.]/"/>
                         <p:ajax update="msgEMACLI" event="keyup"  delay="800"/>
-                        <p:tooltip for="EMACLI" value="Ingrese el TELEFONO" trackMouse="focus"/>
+                        <p:tooltip for="EMACLI" value="Ingrese el Email" trackMouse="focus"/>
                     </p:inputText>
                     <p:message id="msgEMACLI" for="EMACLI"/>   
 
@@ -110,11 +118,13 @@ and open the template in the editor.-->
                                   required="true" requiredMessage="Ingrese los DOMICILIO">
                         <p:keyFilter regEx="/[a-zA-Z_0-9_ ]/"/>
                         <p:ajax update="msgDOMCLI" event="keyup"  delay="800"/>
-                        <p:tooltip for="DOMCLI" value="Ingrese el TELEFONO" trackMouse="focus"/>
+                        <p:tooltip for="DOMCLI" value="Ingrese el Domicilio" trackMouse="focus"/>
                     </p:inputText>
                     <p:message id="msgDOMCLI" for="DOMCLI"/>  
 
-                    <p:commandButton  action="#{ClienteC.registrar()}" value="Registrar" update="tablaCliente msgNOMCLI msgAPECLI msgDNICLI msgTELCLI msgEMACLI msgCODUBI msgDOMCLI frmRegPro"/>
+                    <p:commandButton  action="#{ClienteC.registrar()}" value="Registrar" update="tablaCliente msgNOMCLI msgAPEPATCLI msgAPEMATCLI msgDNICLI msgTELCLI msgEMACLI msgCODUBI msgDOMCLI frmRegPro"
+                                      widgetVar="btnregistrarcli"/>
+                    <p:commandButton action="#{ClienteC.limpiar()}" value="Limpiar" update="frmRegPro"></p:commandButton>
                 </p:panelGrid>
             </h:form>
         </center>
@@ -143,7 +153,14 @@ and open the template in the editor.-->
                                 </center>
                             </h:form>
                         </div>
-
+                        <div style="float:right">
+                            <p:commandButton value="PDF" icon="pi pi-file-pdf" styleClass="rounded-button blue" style="font-weight:bold">
+                                <p:dataExporter type="pdf" target=":tablaCliente:tablaCli" fileName="Lista de Clientes_PDF" options="#{ClienteC.pdf}"/>
+                            </p:commandButton>
+                            <p:commandButton value="EXCEL" icon="pi pi-file-excel" styleClass="rounded-button blue" style="font-weight:bold">
+                                <p:dataExporter type="xls" target=":tablaCliente:tablaCli" fileName="Lista de Clientes_EXCEL" options="#{ClienteC.xls}"/>
+                            </p:commandButton>
+                        </div>
                     </f:facet>  
 
                     <f:facet name= "header"><center style="color: black; font-weight:bold; font-size: 30px">
@@ -157,8 +174,8 @@ and open the template in the editor.-->
                         <h:outputText value="#{lista.NOMCLI}" />
                     </p:column>
 
-                    <p:column headerText="APELLIDO" filterBy="#{lista.APECLI}" style="width: 10px;">
-                        <h:outputText value="#{lista.APECLI}" />
+                    <p:column headerText="APELLIDO" filterBy="#{lista.APEPATCLI} #{lista.APEMATCLI}" style="width: 10px;">
+                        <h:outputText value="#{lista.APEPATCLI} #{lista.APEMATCLI}" />
                     </p:column>
 
                     <p:column headerText="DNI" filterBy="#{lista.DNICLI}" style="width: 10px;">
@@ -202,7 +219,7 @@ and open the template in the editor.-->
         <p:dialog header="Datos del Cliente" widgetVar="wdlgDatos" id="dlgDatos">
             <h:form id="frmModificar2">
                 <p:panelGrid columns="3" styleClass="ui-noborder">
-                   <p:outputLabel value ="NOMBRES" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:outputLabel value ="NOMBRES" style="color:black; font-weight:bold; font-size:16px"/>
                     <p:inputText id="NOMCLI" value="#{ClienteC.cliente.NOMCLI}" required="true"
                                  requiredMessage="Ingrese los NOMBRES">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
@@ -211,14 +228,23 @@ and open the template in the editor.-->
                     </p:inputText>
                     <p:message id="msgNOMCLI" for="NOMCLI"/>  
 
-                    <p:outputLabel value ="APELLIDOS" style="color:black; font-weight:bold; font-size:16px"/>
-                    <p:inputText id="APECLI" value="#{ClienteC.cliente.APECLI}"
-                                 required="true" requiredMessage="Ingrese los APELLIDOS">
+                    <p:outputLabel value ="APELLIDO PATERNO" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText id="APEPATCLI" value="#{ClienteC.cliente.APEPATCLI}"
+                                 required="true" requiredMessage="Ingrese los APELLIDO PATERNO">
                         <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
-                        <p:ajax update="msgAPECLI" event="keyup"  delay="800"/>
-                        <p:tooltip for="APECLI" value="Ingrese el NOMBRE" trackMouse="focus"/>
+                        <p:ajax update="msgAPEPATCLI" event="keyup"  delay="800"/>
+                        <p:tooltip for="APEPATCLI" value="Ingrese el PATERNO" trackMouse="focus"/>
                     </p:inputText>
-                    <p:message id="msgAPECLI" for="APECLI"/>  
+                    <p:message id="msgAPEPATCLI" for="APEPATCLI"/>  
+
+                    <p:outputLabel value ="APELLIDOS MATERNO" style="color:black; font-weight:bold; font-size:16px"/>
+                    <p:inputText id="APEMATCLI" value="#{ClienteC.cliente.APEMATCLI}"
+                                 required="true" requiredMessage="Ingrese los APELLIDO MATERNO">
+                        <p:keyFilter regEx="/[A-Z_a-z_ñ_á_é_í_ó_ú_ ]/"/>
+                        <p:ajax update="msgAPEMATCLI" event="keyup"  delay="800"/>
+                        <p:tooltip for="APEMATCLI" value="Ingrese el APELLIDO MATERNO" trackMouse="focus"/>
+                    </p:inputText>
+                    <p:message id="msgAPEMATCLI" for="APEMATCLI"/>  
 
                     <p:outputLabel value ="DNI" style="color:black; font-weight:bold; font-size:16px"/>
                     <p:inputText id="DNICLI" value="#{ClienteC.cliente.DNICLI}" maxlength="8"
@@ -228,7 +254,6 @@ and open the template in the editor.-->
                         <p:tooltip for="DNICLI" value="Ingrese el NOMBRE" trackMouse="focus"/>
                     </p:inputText>
                     <p:message id="msgDNICLI" for="DNICLI"/>  
-
 
                     <p:outputLabel value ="TELEFONO" style="color:black; font-weight:bold; font-size:16px"/>
                     <p:inputText id="TELCLI" value="#{ClienteC.cliente.TELCLI}" maxlength="9"
@@ -249,7 +274,8 @@ and open the template in the editor.-->
                     <p:message id="msgEMACLI" for="EMACLI"/>   
 
                     <p:outputLabel value ="DISTRITO" style="color:black; font-weight:bold; font-size:16px"/>
-                    <p:selectOneMenu id="CODUBI" value="#{ClienteC.cliente.CODUBI}" style="width:320px" filter="true" filterMatchMode="contains" placeholder="Distrito del cliente" required="true" requiredMessage="Seleccione el Distrito">
+                    <p:selectOneMenu id="CODUBI" value="#{ClienteC.cliente.CODUBI}" style="width:320px" filter="true" 
+                                     filterMatchMode="contains" placeholder="Distrito del cliente" required="true" requiredMessage="Seleccione el Distrito">
                         <f:selectItem noSelectionOption="true" itemLabel="Seleccione" itemValue="#{null}"/>
                         <f:selectItems value="#{ubigeoC.listadoUbigeo}" var="ubigeo"
                                        itemValue="#{ubigeo.CODUBI}"
@@ -283,4 +309,5 @@ and open the template in the editor.-->
             </h:form>
         </p:dialog>
     </h:body>
+    <script src="resources/js/validator.js" type="text/javascript"></script>
 </html>

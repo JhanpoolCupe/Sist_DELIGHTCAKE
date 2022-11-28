@@ -12,7 +12,8 @@ public class Cliente {
 
     private int IDCLI;
     private String NOMCLI;
-    private String APECLI;
+    private String APEPATCLI;
+    private String APEMATCLI;
     private String DNICLI;
     private String TELCLI;
     private String EMACLI;

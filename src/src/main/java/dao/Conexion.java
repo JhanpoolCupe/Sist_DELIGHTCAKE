@@ -26,7 +26,7 @@ public class Conexion {
         }
         return cnx;
     }
-    
+
     public void cerrar() throws Exception {
         if (cnx != null) {
             if (cnx.isClosed() == false) {

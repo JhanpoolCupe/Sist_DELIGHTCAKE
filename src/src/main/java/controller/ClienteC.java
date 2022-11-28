@@ -16,6 +16,7 @@ import lombok.Data;
 import org.primefaces.component.export.ExcelOptions;
 import org.primefaces.component.export.PDFOptions;
 import org.primefaces.component.export.PDFOrientationType;
+import services.EmailS;
 
 @Data
 
@@ -40,6 +41,7 @@ public class ClienteC implements Serializable {
     public void registrar() throws Exception {
         try {
             dao.guardar(cliente);
+            EmailS.enviarEmail(cliente);
             listar();
             limpiar();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrado", "Registrado con éxito"));
@@ -94,9 +96,6 @@ public class ClienteC implements Serializable {
         } catch (Exception e) {
             Logger.getGlobal().log(Level.WARNING, "Error en restaurar ClienteC/listar: ", e.getMessage());
         }
-//        finally {
-//
-//        }
     }
 
     public void limpiar() {
@@ -118,7 +117,7 @@ public class ClienteC implements Serializable {
         pdf.setFacetFontColor("#000000");
         pdf.setFacetFontStyle("BOLD");
         pdf.setCellFontSize("12");
-        pdf.setFontName("Courier");
+        pdf.setFontName("Reporte");
         pdf.setOrientation(PDFOrientationType.LANDSCAPE);
     }
 

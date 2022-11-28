@@ -15,17 +15,18 @@ public class ClienteImpl extends Conexion implements ICRUD<Cliente> {
     @Override
     public void guardar(Cliente cliente) throws Exception {
         try {
-            String sql = "insert into CLIENTE" + " (NOMCLI,APECLI,DNICLI,TELCLI,EMACLI,ESTCLI,CODUBI,DOMCLI)" + 
-                    " values (?,?,?,?,?,?,?,?) ";
+            String sql = "insert into CLIENTE" + " (NOMCLI,APEPATCLI,APEMATCLI,DNICLI,TELCLI,EMACLI,ESTCLI,CODUBI,DOMCLI)" + 
+                    " values (?,?,?,?,?,?,?,?,?) ";
             PreparedStatement ps = dao.Conexion.conectar().prepareStatement(sql);
             ps.setString(1, cliente.getNOMCLI());
-            ps.setString(2, cliente.getAPECLI());
-            ps.setString(3, cliente.getDNICLI());
-            ps.setString(4, cliente.getTELCLI());
-            ps.setString(5, cliente.getEMACLI());
-            ps.setString(6, "A");
-            ps.setString(7, cliente.getCODUBI());
-            ps.setString(8, cliente.getDOMCLI());
+            ps.setString(2, cliente.getAPEPATCLI());
+            ps.setString(3, cliente.getAPEMATCLI());
+            ps.setString(4, cliente.getDNICLI());
+            ps.setString(5, cliente.getTELCLI());
+            ps.setString(6, cliente.getEMACLI());
+            ps.setString(7, "A");
+            ps.setString(8, cliente.getCODUBI());
+            ps.setString(9, cliente.getDOMCLI());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -38,17 +39,18 @@ public class ClienteImpl extends Conexion implements ICRUD<Cliente> {
     @Override
     public void modificar(Cliente cliente) throws Exception {
         try {
-            String sql = "update CLIENTE set NOMCLI=?,APECLI=?,DNICLI=?,TELCLI=?, EMACLI=?,ESTCLI=?,CODUBI=?,DOMCLI=? where IDCLI=?";
+            String sql = "update CLIENTE set NOMCLI=?,APEPATCLI=?,APEMATCLI=?,DNICLI=?,TELCLI=?, EMACLI=?,ESTCLI=?,CODUBI=?,DOMCLI=? where IDCLI=?";
             PreparedStatement ps = this.conectar().prepareStatement(sql);
             ps.setString(1, cliente.getNOMCLI());
-            ps.setString(2, cliente.getAPECLI());
-            ps.setString(3, cliente.getDNICLI());
-            ps.setString(4, cliente.getTELCLI());
-            ps.setString(5, cliente.getEMACLI());
-            ps.setString(6, "A");
-            ps.setString(7, cliente.getCODUBI());
-            ps.setString(8, cliente.getDOMCLI());
-            ps.setInt(9, cliente.getIDCLI());
+            ps.setString(2, cliente.getAPEPATCLI());
+            ps.setString(3, cliente.getAPEMATCLI());
+            ps.setString(4, cliente.getDNICLI());
+            ps.setString(5, cliente.getTELCLI());
+            ps.setString(6, cliente.getEMACLI());
+            ps.setString(7, "A");
+            ps.setString(8, cliente.getCODUBI());
+            ps.setString(9, cliente.getDOMCLI());
+            ps.setInt(10, cliente.getIDCLI());
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -102,9 +104,6 @@ public class ClienteImpl extends Conexion implements ICRUD<Cliente> {
             case 3:
                 sql = "SELECT * FROM vCLIENTE";
                 break;
-            default:
-                sql = "SELECT * FROM vCLIENTE WHERE ESTCLI = 'A'";
-                break;
         }
         try {
             lista = new ArrayList();
@@ -114,7 +113,8 @@ public class ClienteImpl extends Conexion implements ICRUD<Cliente> {
                 Cliente cli = new Cliente();
                 cli.setIDCLI(rs.getInt("IDCLI"));
                 cli.setNOMCLI(rs.getString("NOMCLI"));
-                cli.setAPECLI(rs.getString("APECLI"));
+                cli.setAPEPATCLI(rs.getString("APEPATCLI"));
+                cli.setAPEMATCLI(rs.getString("APEMATCLI"));
                 cli.setDNICLI(rs.getString("DNICLI"));
                 cli.setTELCLI(rs.getString("TELCLI"));
                 cli.setEMACLI(rs.getString("EMACLI"));
